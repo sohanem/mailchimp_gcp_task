@@ -1,0 +1,21 @@
+DECLARE fields STRING;
+DECLARE updates STRING;
+
+EXECUTE IMMEDIATE (
+     "SELECT STRING_AGG(column_name) FROM london_bicycles.INFORMATION_SCHEMA.COLUMNS WHERE table_name = 'cycle_stations'"
+  ) INTO fields;
+
+EXECUTE IMMEDIATE (
+    """WITH t AS (SELECT column_name FROM london_bicycles.INFORMATION_SCHEMA.COLUMNS WHERE table_name = 'cycle_stations')
+       SELECT STRING_AGG("t."||column_name ||" = "|| "s."||column_name) from t join t as s using(column_name)"""
+  ) INTO updates;
+
+EXECUTE IMMEDIATE """
+  MERGE london_bicycles.cycle_stations T
+  USING london_bicycles.cycle_station_update S
+    ON T.id = S.id
+  WHEN MATCHED THEN 
+    UPDATE SET """||updates||"""
+  WHEN NOT MATCHED THEN
+    INSERT ("""||fields||""") VALUES ("""||fields||""")"""
+    ;
