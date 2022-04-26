@@ -1,4 +1,4 @@
-create or replace table reporting_london_bicycle.report_london_bicyle_hires as
+create or replace table reporting_london_bicycle.sohaney_report_london_bicyle_hires as
 -- 1. # of rides started at a station on a particular start date
 with 
 start_rides as (select start_station_id as station_id, 
