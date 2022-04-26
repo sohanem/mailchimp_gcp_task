@@ -1,4 +1,4 @@
-# MailChimp GCP Import Task
+# MailChimp GCP Task
 
 ## Steps of Process: 
 
